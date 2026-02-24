@@ -9,7 +9,7 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-    title: 'Trường Mầm non Ninh Lai - Trợ lý AI hỗ trợ phụ huynh',
+    title: 'Trợ lý AI Trường mầm non Ninh Lai',
     description: 'Chatbot hỗ trợ thông tin cho phụ huynh Trường Mầm non Ninh Lai. Giải đáp thắc mắc về nhập học, lịch học, thực đơn và các thông tin nhà trường.',
 };
 

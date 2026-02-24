@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 
 const WELCOME_MESSAGE = {
     role: 'bot',
-    content: `Chào bố mẹ! 🥰\nEm là Trợ lý AI siêu cấp đáng yêu của Trường Mầm non Ninh Lai đây ạ. 🏫✨\nBố mẹ muốn hỏi thông tin gì cứ nhắn cho em nha! 👇`,
+    content: `Chào bố mẹ! 👋\nEm là Trợ lý AI Trường mầm non Ninh Lai. Bố mẹ cần hỗ trợ thông tin gì cứ nhắn em nhé! 🏫✨`,
 };
 
 const QUICK_QUESTIONS = [
@@ -47,8 +47,9 @@ function TypingIndicator() {
     );
 }
 
-function ChatMessage({ message, index }) {
+function ChatMessage({ message, index, onReact }) {
     const isBot = message.role === 'bot';
+    const hasHeart = message.reaction === 'heart';
 
     return (
         <div
@@ -56,8 +57,21 @@ function ChatMessage({ message, index }) {
             style={{ animationDelay: `${index * 0.05}s` }}
         >
             {isBot ? <BotAvatar /> : <UserAvatar />}
-            <div className={`chat-bubble ${isBot ? 'chat-bubble-bot' : 'chat-bubble-user'}`}>
-                {message.content}
+            <div className="flex flex-col gap-1 max-w-[85%]">
+                <div className={`chat-bubble ${isBot ? 'chat-bubble-bot' : 'chat-bubble-user'}`}>
+                    {message.content}
+                </div>
+                {isBot && (
+                    <div className="reaction-container">
+                        <button
+                            onClick={() => onReact(index, 'heart')}
+                            className={`heart-btn ${hasHeart ? 'active animate-heart-pop' : ''}`}
+                            title="Hữu ích"
+                        >
+                            {hasHeart ? '❤️' : '🤍'} {hasHeart ? 'Đã thích' : 'Hữu ích'}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -137,27 +151,38 @@ export default function Home() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: trimmed,
-                    history: currentHistory
+                    history: currentHistory.map(m => ({ role: m.role, content: m.content }))
                 }),
             });
 
             const data = await res.json();
             const replyText = data.reply || 'Xin lỗi, em chưa thể trả lời câu hỏi này.';
-            const botMessage = { role: 'bot', content: replyText };
+            const botMessage = { role: 'bot', content: replyText, reaction: null };
 
             setMessages(prev => [...prev, botMessage]);
 
             // Auto play TTS for the bot's response
-            playAudio(replyText);
+            if (replyText.trim()) {
+                playAudio(replyText);
+            }
 
         } catch (error) {
             const errorMsg = 'Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.';
-            setMessages(prev => [...prev, { role: 'bot', content: errorMsg }]);
+            setMessages(prev => [...prev, { role: 'bot', content: errorMsg, reaction: null }]);
             playAudio(errorMsg);
         } finally {
             setIsLoading(false);
-            inputRef.current?.focus();
+            setTimeout(() => inputRef.current?.focus(), 100);
         }
+    };
+
+    const handleReaction = (index, type) => {
+        setMessages(prev => prev.map((msg, i) => {
+            if (i === index) {
+                return { ...msg, reaction: msg.reaction === type ? null : type };
+            }
+            return msg;
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -218,7 +243,7 @@ export default function Home() {
                 </div>
                 <div>
                     <h1 className="text-[17px] font-extrabold text-[#1F2937] leading-tight flex items-center gap-1.5">
-                        Trợ lý Ninh Lai
+                        Trợ lý AI Trường mầm non Ninh Lai
                         <span className="inline-flex w-4 h-4 items-center justify-center bg-[#22C55E] rounded-full">
                             <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                         </span>
@@ -244,7 +269,7 @@ export default function Home() {
             {/* Messages Area */}
             <main className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
                 {messages.map((msg, i) => (
-                    <ChatMessage key={i} message={msg} index={i} />
+                    <ChatMessage key={i} message={msg} index={i} onReact={handleReaction} />
                 ))}
 
                 {/* Quick Questions */}
