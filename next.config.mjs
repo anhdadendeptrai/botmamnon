@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['mammoth', 'word-extractor', 'xlsx', 'pdf-parse', 'pdfjs-dist', '@napi-rs/canvas'],
+  serverExternalPackages: ['mammoth', 'word-extractor', 'xlsx'],
 };
 
 export default nextConfig;
