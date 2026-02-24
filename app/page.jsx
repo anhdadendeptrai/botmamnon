@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 
 const WELCOME_MESSAGE = {
     role: 'bot',
-    content: `Chào phụ huynh 🌷\nEm là Trợ lý AI hỗ trợ thông tin Trường Mầm non Ninh Lai.\nPhụ huynh muốn hỏi nội dung gì ạ?`,
+    content: `Chào bố mẹ! 🥰\nEm là Trợ lý AI siêu cấp đáng yêu của Trường Mầm non Ninh Lai đây ạ. 🏫✨\nBố mẹ muốn hỏi thông tin gì cứ nhắn cho em nha! 👇`,
 };
 
 const QUICK_QUESTIONS = [
@@ -18,8 +18,8 @@ const QUICK_QUESTIONS = [
 
 function BotAvatar() {
     return (
-        <div className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg"
-            style={{ background: 'linear-gradient(135deg, var(--color-mint), var(--color-sky))' }}>
+        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-sm z-10"
+            style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-mint-light))', border: '2px solid white' }}>
             🌸
         </div>
     );
@@ -27,9 +27,9 @@ function BotAvatar() {
 
 function UserAvatar() {
     return (
-        <div className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg"
-            style={{ background: 'linear-gradient(135deg, var(--color-peach), var(--color-coral))' }}>
-            👤
+        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-sm z-10"
+            style={{ background: 'linear-gradient(135deg, var(--color-peach), var(--color-coral))', border: '2px solid white' }}>
+            👦
         </div>
     );
 }
@@ -181,27 +181,28 @@ export default function Home() {
 
     if (!hasStarted) {
         return (
-            <div className="flex flex-col items-center justify-center h-screen" style={{ background: 'var(--color-cream)' }}>
-                <div className="text-center animate-fade-in-up">
-                    <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl shadow-md mb-6"
-                        style={{ background: 'var(--color-white)' }}>
+            <div className="flex flex-col items-center justify-center h-screen bg-transparent relative overflow-hidden">
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-40 bg-[radial-gradient(circle_at_50%_50%,_white_0%,_transparent_100%)]"></div>
+                <div className="text-center animate-fade-in-up max-w-sm px-6 relative z-10">
+                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center text-5xl mb-8 border-[5px] border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-transform hover:scale-105"
+                        style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-mint-light))' }}>
                         🏫
                     </div>
-                    <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-mint-dark)' }}>
-                        Trường Mầm non Ninh Lai
+                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight" style={{ color: 'var(--color-text)' }}>
+                        Mầm non Ninh Lai
                     </h1>
-                    <p className="text-sm font-medium mb-8" style={{ color: 'var(--color-text-light)' }}>
-                        Trợ lý AI hỗ trợ phụ huynh
+                    <p className="text-[15px] font-semibold mb-10 opacity-70" style={{ color: 'var(--color-text-light)' }}>
+                        Cùng bé khôn lớn mỗi ngày 🎈
                     </p>
                     <button
                         onClick={() => setHasStarted(true)}
-                        className="px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg hover:scale-105 transition-transform"
+                        className="w-full px-8 py-[18px] rounded-2xl text-white font-bold text-[17px] shadow-[0_8px_20px_rgba(34,197,94,0.3)] hover:shadow-[0_12px_24px_rgba(34,197,94,0.4)] hover:-translate-y-1 transition-all duration-300"
                         style={{ background: 'linear-gradient(135deg, var(--color-mint-dark), var(--color-mint))' }}
                     >
-                        Bắt đầu trò chuyện
+                        Bắt đầu trò chuyện ✨
                     </button>
-                    <p className="text-xs mt-4 opacity-70" style={{ color: 'var(--color-text-light)' }}>
-                        (Vui lòng nhấn Bắt đầu để AI có thể trò chuyện cùng phụ huynh)
+                    <p className="text-xs mt-6 font-semibold opacity-50" style={{ color: 'var(--color-text-light)' }}>
+                        Trợ lý AI đáng yêu luôn sẵn sàng 24/7!
                     </p>
                 </div>
             </div>
@@ -211,17 +212,19 @@ export default function Home() {
     return (
         <div className="flex flex-col h-screen" style={{ background: 'var(--color-cream)' }}>
             {/* Header */}
-            <header className="header-gradient px-4 py-3 shadow-md flex items-center gap-3 flex-shrink-0">
-                <div className="w-11 h-11 rounded-full flex items-center justify-center text-2xl shadow-sm"
-                    style={{ background: 'rgba(255,255,255,0.35)', backdropFilter: 'blur(8px)' }}>
+            <header className="header-gradient px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center gap-3 flex-shrink-0 z-20 relative">
+                <div className="w-12 h-12 rounded-[1rem] flex items-center justify-center text-[26px] shadow-sm bg-white/40 backdrop-blur-md border border-white/50">
                     🏫
                 </div>
                 <div>
-                    <h1 className="text-white font-bold text-base leading-tight drop-shadow-sm">
-                        Trường Mầm non Ninh Lai
+                    <h1 className="text-[17px] font-extrabold text-[#1F2937] leading-tight flex items-center gap-1.5">
+                        Trợ lý Ninh Lai
+                        <span className="inline-flex w-4 h-4 items-center justify-center bg-[#22C55E] rounded-full">
+                            <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                        </span>
                     </h1>
-                    <p className="text-white/80 text-xs font-medium">
-                        Trợ lý AI hỗ trợ phụ huynh
+                    <p className="text-[13px] font-bold text-[#6B7280] opacity-90 mt-0.5">
+                        Luôn sẵn sàng hỗ trợ 💖
                     </p>
                 </div>
                 <div className="ml-auto flex items-center gap-3">
