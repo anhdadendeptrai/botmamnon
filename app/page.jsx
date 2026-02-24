@@ -124,7 +124,7 @@ export default function Home() {
     useEffect(() => {
         if (hasStarted && isAudioEnabled) {
             const playWelcome = setTimeout(() => {
-                playAudio(WELCOME_MESSAGE.content);
+                playAudio(WELCOME_MESSAGE.content).catch(() => { });
             }, 300);
             return () => clearTimeout(playWelcome);
         }
@@ -154,12 +154,12 @@ export default function Home() {
             });
 
             if (!res.ok) {
+                let errorMessage = 'Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.';
                 try {
                     const errData = await res.json();
-                    throw new Error(errData.reply || 'Server Error');
-                } catch {
-                    throw new Error('Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.');
-                }
+                    if (errData.reply) errorMessage = errData.reply;
+                } catch { }
+                throw new Error(errorMessage);
             }
 
             const data = await res.json();
@@ -171,13 +171,13 @@ export default function Home() {
 
             // Auto play TTS for the bot's response
             if (cleanReply.trim()) {
-                playAudio(cleanReply);
+                playAudio(cleanReply).catch(() => { });
             }
 
         } catch (error) {
-            const errorMsg = 'Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.';
+            const errorMsg = error.message || 'Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.';
             setMessages(prev => [...prev, { role: 'bot', content: errorMsg, reaction: null }]);
-            playAudio(errorMsg);
+            playAudio(errorMsg).catch(() => { });
         } finally {
             setIsLoading(false);
             setTimeout(() => inputRef.current?.focus(), 100);
