@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FFF8F0;
+  --color-cream-dark: #F5EDE3;
+  --color-mint: #A8D8C8;
+  --color-mint-light: #C5E8DB;
+  --color-mint-dark: #7BBFA8;
+  --color-peach: #FFD4B8;
+  --color-peach-light: #FFE4D0;
+  --color-peach-dark: #F5B895;
+  --color-coral: #FF9B85;
+  --color-sky: #B8D8F0;
+  --color-lavender: #D4C5F0;
+  --color-text: #3D3D3D;
+  --color-text-light: #6B6B6B;
+  --color-white: #FFFFFF;
+
+  --font-nunito: 'Nunito', sans-serif;
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-nunito);
+  color: var(--color-text);
+  background-color: var(--color-cream);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-mint);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mint-dark);
+}
+
+/* Chat Bubble Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes dotPulse {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+
+/* Typing indicator dots */
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-mint-dark);
+  display: inline-block;
+  animation: dotPulse 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+/* Chat message styling */
+.chat-bubble {
+  max-width: 82%;
+  padding: 16px 20px;
+  border-radius: 24px;
+  line-height: 1.6;
+  font-size: 15px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  transition: all 0.2s ease;
+}
+
+.chat-bubble-bot {
+  background: var(--color-white);
+  border: 1px solid rgba(168, 216, 200, 0.4);
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.chat-bubble-user {
+  background: linear-gradient(135deg, var(--color-mint), var(--color-mint-light));
+  color: var(--color-text);
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 4px 14px rgba(168, 216, 200, 0.2);
+}
+
+/* Glassmorphism input area */
+.input-area {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(168, 216, 200, 0.2);
+}
+
+/* Send button */
+.send-btn {
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(123, 191, 168, 0.3);
+}
+
+.send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(123, 191, 168, 0.4);
+}
+
+.send-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Quick action buttons */
+.quick-btn {
+  background: var(--color-white);
+  border: 1.5px solid rgba(168, 216, 200, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.quick-btn:hover {
+  background: #fdfdfd;
+  border-color: var(--color-mint);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(168, 216, 200, 0.15);
+}
+
+/* Audio Toggle Button */
+.audio-btn {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+.audio-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* Header gradient */
+.header-gradient {
+  background: linear-gradient(135deg, var(--color-mint) 0%, var(--color-sky) 50%, var(--color-lavender) 100%);
+}
