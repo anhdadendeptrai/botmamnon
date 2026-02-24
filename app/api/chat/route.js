@@ -3,6 +3,8 @@ import { loadDocs } from '@/lib/loadDocs';
 import { searchDocs } from '@/lib/searchDocs';
 import { askGemini } from '@/lib/geminiClient';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
     try {
         const { message, history } = await request.json();

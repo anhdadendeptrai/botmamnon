@@ -18,18 +18,16 @@ const QUICK_QUESTIONS = [
 
 function BotAvatar() {
     return (
-        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-sm z-10"
-            style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-mint-light))', border: '2px solid white' }}>
-            🌸
+        <div className="avatar-ring bot-avatar">
+            <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-full relative z-10" />
         </div>
     );
 }
 
 function UserAvatar() {
     return (
-        <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-sm z-10"
-            style={{ background: 'linear-gradient(135deg, var(--color-peach), var(--color-coral))', border: '2px solid white' }}>
-            👦
+        <div className="avatar-ring user">
+            <span className="text-xl">👦</span>
         </div>
     );
 }
@@ -155,15 +153,25 @@ export default function Home() {
                 }),
             });
 
-            const data = await res.json();
-            const replyText = data.reply || 'Xin lỗi, em chưa thể trả lời câu hỏi này.';
-            const botMessage = { role: 'bot', content: replyText, reaction: null };
+            if (!res.ok) {
+                try {
+                    const errData = await res.json();
+                    throw new Error(errData.reply || 'Server Error');
+                } catch {
+                    throw new Error('Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.');
+                }
+            }
 
+            const data = await res.json();
+            const rawReply = data.reply || 'Xin lỗi, em chưa thể trả lời câu hỏi này.';
+            const cleanReply = rawReply.replace(/\*\*/g, '');
+
+            const botMessage = { role: 'bot', content: cleanReply, reaction: null };
             setMessages(prev => [...prev, botMessage]);
 
             // Auto play TTS for the bot's response
-            if (replyText.trim()) {
-                playAudio(replyText);
+            if (cleanReply.trim()) {
+                playAudio(cleanReply);
             }
 
         } catch (error) {
@@ -206,27 +214,30 @@ export default function Home() {
 
     if (!hasStarted) {
         return (
-            <div className="flex flex-col items-center justify-center h-screen bg-transparent relative overflow-hidden">
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-40 bg-[radial-gradient(circle_at_50%_50%,_white_0%,_transparent_100%)]"></div>
-                <div className="text-center animate-fade-in-up max-w-sm px-6 relative z-10">
-                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center text-5xl mb-8 border-[5px] border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-transform hover:scale-105"
-                        style={{ background: 'linear-gradient(135deg, var(--color-white), var(--color-mint-light))' }}>
-                        🏫
+            <div className="flex flex-col items-center justify-center h-screen relative overflow-hidden">
+                <div className="mesh-bg"></div>
+                <div className="text-center w-full max-w-md px-8 py-10 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] animate-scale-in relative z-10 mx-4">
+                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 shadow-lg bg-white relative animate-float overflow-hidden">
+                        <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-green-100 to-emerald-50 opacity-50 z-0"></div>
+                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-[88%] h-[88%] object-cover rounded-full relative z-10" />
                     </div>
-                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight" style={{ color: 'var(--color-text)' }}>
+                    <h1 className="text-[32px] font-extrabold mb-3 tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent drop-shadow-sm">
                         Mầm non Ninh Lai
                     </h1>
-                    <p className="text-[15px] font-semibold mb-10 opacity-70" style={{ color: 'var(--color-text-light)' }}>
+                    <p className="text-[16px] font-semibold mb-10 text-gray-600">
                         Cùng bé khôn lớn mỗi ngày 🎈
                     </p>
-                    <button
-                        onClick={() => setHasStarted(true)}
-                        className="w-full px-8 py-[18px] rounded-2xl text-white font-bold text-[17px] shadow-[0_8px_20px_rgba(34,197,94,0.3)] hover:shadow-[0_12px_24px_rgba(34,197,94,0.4)] hover:-translate-y-1 transition-all duration-300"
-                        style={{ background: 'linear-gradient(135deg, var(--color-mint-dark), var(--color-mint))' }}
-                    >
-                        Bắt đầu trò chuyện ✨
-                    </button>
-                    <p className="text-xs mt-6 font-semibold opacity-50" style={{ color: 'var(--color-text-light)' }}>
+
+                    <div className="start-btn-glow">
+                        <button
+                            onClick={() => setHasStarted(true)}
+                            className="w-full px-8 py-[18px] rounded-2xl text-white font-bold text-[18px] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative z-10"
+                            style={{ background: 'linear-gradient(135deg, var(--color-mint-dark), var(--color-mint))' }}
+                        >
+                            Bắt đầu trò chuyện ✨
+                        </button>
+                    </div>
+                    <p className="text-xs mt-6 font-semibold text-gray-400">
                         Trợ lý AI đáng yêu luôn sẵn sàng 24/7!
                     </p>
                 </div>
@@ -235,33 +246,35 @@ export default function Home() {
     }
 
     return (
-        <div className="flex flex-col h-screen" style={{ background: 'var(--color-cream)' }}>
+        <div className="flex flex-col h-screen relative">
+            <div className="mesh-bg"></div>
+
             {/* Header */}
-            <header className="header-gradient px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center gap-3 flex-shrink-0 z-20 relative">
-                <div className="w-12 h-12 rounded-[1rem] flex items-center justify-center text-[26px] shadow-sm bg-white/40 backdrop-blur-md border border-white/50">
-                    🏫
+            <header className="header-glass px-5 py-3.5 flex items-center gap-4 flex-shrink-0 z-20 relative">
+                <div className="w-12 h-12 rounded-[1rem] flex items-center justify-center bg-white/80 border border-white shadow-sm shrink-0 overflow-hidden p-[3px]">
+                    <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-xl" />
                 </div>
-                <div>
-                    <h1 className="text-[17px] font-extrabold text-[#1F2937] leading-tight flex items-center gap-1.5">
+                <div className="flex-1 min-w-0">
+                    <h1 className="text-[17px] font-extrabold text-gray-800 leading-tight flex items-center gap-1.5 truncate">
                         Trợ lý AI Trường mầm non Ninh Lai
-                        <span className="inline-flex w-4 h-4 items-center justify-center bg-[#22C55E] rounded-full">
+                        <span className="inline-flex w-3.5 h-3.5 items-center justify-center bg-green-500 rounded-full shrink-0">
                             <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                         </span>
                     </h1>
-                    <p className="text-[13px] font-bold text-[#6B7280] opacity-90 mt-0.5">
+                    <p className="text-[13px] font-bold text-gray-500 mt-0.5 truncate">
                         Luôn sẵn sàng hỗ trợ 💖
                     </p>
                 </div>
-                <div className="ml-auto flex items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                     <button
                         onClick={toggleAudio}
-                        className="audio-btn p-2 rounded-full text-white flex items-center justify-center"
+                        className="audio-btn"
                         title={isAudioEnabled ? "Tắt âm thanh" : "Bật lại âm thanh"}
                     >
                         {isAudioEnabled ? '🔊' : '🔇'}
                     </button>
-                    <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-green-300 animate-pulse shadow-[0_0_8px_rgba(134,239,172,0.8)]"></span>
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 border border-green-200">
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse-glow"></span>
                     </div>
                 </div>
             </header>
@@ -274,73 +287,55 @@ export default function Home() {
 
                 {/* Quick Questions */}
                 {showQuickQuestions && messages.length === 1 && (
-                    <div className="animate-fade-in-up mt-6" style={{ animationDelay: '0.3s' }}>
-                        <p className="text-sm font-semibold mb-3 pl-2" style={{ color: 'var(--color-text-light)' }}>
+                    <div className="animate-fade-in-up mt-8 max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
+                        <p className="text-sm font-bold mb-2 pl-2 text-gray-500">
                             💡 Phụ huynh có thể tham khảo:
                         </p>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="flashcard-grid">
                             {QUICK_QUESTIONS.map((q, i) => (
-                                <button
+                                <div
                                     key={i}
                                     onClick={() => sendMessage(q.text)}
-                                    className="quick-btn rounded-2xl px-4 py-3.5 text-left text-sm font-medium flex items-center gap-3"
-                                    style={{ color: 'var(--color-text)', animationDelay: `${0.4 + i * 0.05}s` }}
+                                    className="flashcard"
+                                    style={{ animationDelay: `${0.4 + i * 0.05}s` }}
                                 >
-                                    <span className="text-xl drop-shadow-sm">{q.emoji}</span>
-                                    <span className="leading-snug">{q.text}</span>
-                                </button>
+                                    <span className="emoji">{q.emoji}</span>
+                                    <span className="text">{q.text}</span>
+                                </div>
                             ))}
                         </div>
                     </div>
                 )}
 
-                {isLoading && <TypingIndicator />}
+                {isLoading && messages[messages.length - 1]?.role === 'user' && <TypingIndicator />}
                 <div ref={messagesEndRef} />
             </main>
 
             {/* Input Area */}
-            <div className="input-area px-4 py-4 flex-shrink-0 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
-                <form onSubmit={handleSubmit} className="flex items-end gap-2.5 max-w-3xl mx-auto">
-                    <div className="flex-1 relative">
-                        <textarea
-                            ref={inputRef}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Phụ huynh nhập câu hỏi tại đây..."
-                            disabled={isLoading}
-                            rows={1}
-                            className="w-full resize-none rounded-2xl px-5 py-3.5 text-[15px] border-2 focus:outline-none transition-all duration-300"
-                            style={{
-                                borderColor: 'var(--color-mint-light)',
-                                background: 'var(--color-white)',
-                                color: 'var(--color-text)',
-                            }}
-                            onFocus={(e) => {
-                                e.target.style.borderColor = 'var(--color-mint-dark)';
-                                e.target.style.boxShadow = '0 4px 12px rgba(168, 216, 200, 0.15)';
-                            }}
-                            onBlur={(e) => {
-                                e.target.style.borderColor = 'var(--color-mint-light)';
-                                e.target.style.boxShadow = 'none';
-                            }}
-                        />
-                    </div>
+            <div className="input-dock-container">
+                <div className="input-dock">
+                    <textarea
+                        ref={inputRef}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Nhập tin nhắn cho trường..."
+                        disabled={isLoading}
+                        rows={1}
+                    />
                     <button
-                        type="submit"
+                        onClick={handleSubmit}
                         disabled={!input.trim() || isLoading}
-                        className="send-btn rounded-2xl p-3.5 text-white flex-shrink-0"
+                        className="send-btn"
+                        title="Gửi tin nhắn"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <line x1="22" y1="2" x2="11" y2="13" />
                             <polygon points="22 2 15 22 11 13 2 9 22 2" />
                         </svg>
                     </button>
-                </form>
-                <p className="text-center text-[11px] mt-2.5 font-medium opacity-70" style={{ color: 'var(--color-text-light)' }}>
-                    Thông tin được trích xuất từ tài liệu chính thức của Trường Mầm non Ninh Lai
-                </p>
+                </div>
             </div>
         </div>
     );
