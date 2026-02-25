@@ -89,7 +89,7 @@ export async function GET() {
             // Test 4a: List models để kiểm tra API key có hợp lệ
             let modelTestResult = 'unknown';
             try {
-                const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+                const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
                 const startTime = Date.now();
                 const result = await model.generateContent('Trả lời đúng 2 từ: Xin chào');
                 const response = await result.response;
@@ -98,14 +98,14 @@ export async function GET() {
 
                 modelTestResult = {
                     status: '✅ PASS',
-                    model: 'gemini-1.5-flash',
+                    model: 'gemini-2.5-flash',
                     responseTimeMs: elapsed,
                     response: text.substring(0, 200),
                 };
             } catch (modelErr) {
                 modelTestResult = {
                     status: '❌ FAIL',
-                    model: 'gemini-1.5-flash',
+                    model: 'gemini-2.5-flash',
                     errorName: modelErr.name,
                     errorMessage: modelErr.message,
                     errorStatus: modelErr.status,
@@ -113,7 +113,7 @@ export async function GET() {
                 };
 
                 // Fallback: try other model names
-                const fallbackModels = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro'];
+                const fallbackModels = ['gemini-2.5-flash', 'gemini-2.5-flash-latest', 'gemini-pro'];
                 for (const fallbackName of fallbackModels) {
                     try {
                         const fbModel = genAI.getGenerativeModel({ model: fallbackName });
@@ -155,7 +155,7 @@ export async function GET() {
 
             const genAI = new GoogleGenerativeAI(apiKey);
             const model = genAI.getGenerativeModel({
-                model: 'gemini-1.5-flash',
+                model: 'gemini-2.5-flash',
                 systemInstruction: 'Bạn là trợ lý AI trường mầm non. Trả lời ngắn gọn.'
             });
 
