@@ -149,7 +149,10 @@ export default function Home() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: trimmed,
-                    history: currentHistory.map(m => ({ role: m.role, content: m.content }))
+                    history: currentHistory
+                        .filter(m => m !== WELCOME_MESSAGE) // Bỏ tin nhắn chào mừng
+                        .slice(-10) // Chỉ gửi 10 tin nhắn gần nhất
+                        .map(m => ({ role: m.role, content: m.content }))
                 }),
             });
 

@@ -42,7 +42,8 @@ export async function POST(request) {
         return NextResponse.json({ reply });
     } catch (error) {
         console.error(`[CHAT API] ❌ Error after ${Date.now() - reqStartTime}ms:`, error.message);
-        console.error('[CHAT API] Full error:', error);
+        console.error('[CHAT API] Error name:', error.name, '| Status:', error?.status);
+        console.error('[CHAT API] Stack:', error.stack?.split('\n').slice(0, 3).join('\n'));
 
         const errorMessage = error.message?.includes('GEMINI_API_KEY')
             ? error.message
