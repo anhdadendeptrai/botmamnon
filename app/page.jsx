@@ -215,32 +215,54 @@ export default function Home() {
         }
     };
 
+    // ====== WELCOME SCREEN ======
     if (!hasStarted) {
         return (
             <div className="flex flex-col items-center justify-center h-screen relative overflow-hidden">
                 <div className="mesh-bg"></div>
-                <div className="text-center w-full max-w-md px-8 py-10 rounded-3xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.05)] animate-scale-in relative z-10 mx-4">
-                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 shadow-lg bg-white relative animate-float overflow-hidden">
-                        <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-green-100 to-emerald-50 opacity-50 z-0"></div>
-                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-[88%] h-[88%] object-cover rounded-full relative z-10" />
+
+                <div className="welcome-card text-center w-full max-w-sm px-8 py-10 mx-4 animate-scale-in relative z-10">
+                    {/* Avatar */}
+                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 relative animate-float overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(56,189,248,0.08))',
+                            boxShadow: '0 8px 32px rgba(16,185,129,0.12)',
+                            border: '1px solid rgba(16,185,129,0.15)'
+                        }}
+                    >
+                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-[85%] h-[85%] object-cover rounded-full relative z-10" />
                     </div>
-                    <h1 className="text-[32px] font-extrabold mb-3 tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent drop-shadow-sm">
+
+                    {/* Title */}
+                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight"
+                        style={{
+                            background: 'linear-gradient(135deg, #059669, #34D399)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                        }}
+                    >
                         Mầm non Ninh Lai
                     </h1>
-                    <p className="text-[16px] font-semibold mb-10 text-gray-600">
+                    <p className="text-[15px] font-semibold mb-10" style={{ color: 'var(--color-text-secondary)' }}>
                         Cùng bé khôn lớn mỗi ngày 🎈
                     </p>
 
+                    {/* Start Button */}
                     <div className="start-btn-glow">
                         <button
                             onClick={() => setHasStarted(true)}
-                            className="w-full px-8 py-[18px] rounded-2xl text-white font-bold text-[18px] shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative z-10"
-                            style={{ background: 'linear-gradient(135deg, var(--color-mint-dark), var(--color-mint))' }}
+                            className="w-full px-8 py-[16px] rounded-2xl text-white font-bold text-[17px] hover:-translate-y-1 transition-all duration-300 relative z-10"
+                            style={{
+                                background: 'linear-gradient(135deg, var(--color-accent-dark), var(--color-accent))',
+                                boxShadow: '0 8px 24px var(--color-accent-glow)',
+                                border: '1px solid rgba(52, 211, 153, 0.3)',
+                            }}
                         >
                             Bắt đầu trò chuyện ✨
                         </button>
                     </div>
-                    <p className="text-xs mt-6 font-semibold text-gray-400">
+
+                    <p className="text-xs mt-6 font-semibold" style={{ color: 'var(--color-text-muted)' }}>
                         Trợ lý AI đáng yêu luôn sẵn sàng 24/7!
                     </p>
                 </div>
@@ -248,70 +270,87 @@ export default function Home() {
         );
     }
 
+    // ====== CHAT SCREEN ======
     return (
         <div className="flex flex-col h-screen relative">
             <div className="mesh-bg"></div>
 
             {/* Header */}
-            <header className="header-glass px-5 py-3.5 flex items-center gap-4 flex-shrink-0 z-20 relative">
-                <div className="w-12 h-12 rounded-[1rem] flex items-center justify-center bg-white/80 border border-white shadow-sm shrink-0 overflow-hidden p-[3px]">
-                    <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-xl" />
-                </div>
-                <div className="flex-1 min-w-0">
-                    <h1 className="text-[17px] font-extrabold text-gray-800 leading-tight flex items-center gap-1.5 truncate">
-                        Trợ lý AI Trường mầm non Ninh Lai
-                        <span className="inline-flex w-3.5 h-3.5 items-center justify-center bg-green-500 rounded-full shrink-0">
-                            <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
-                        </span>
-                    </h1>
-                    <p className="text-[13px] font-bold text-gray-500 mt-0.5 truncate">
-                        Luôn sẵn sàng hỗ trợ 💖
-                    </p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                    <button
-                        onClick={toggleAudio}
-                        className="audio-btn"
-                        title={isAudioEnabled ? "Tắt âm thanh" : "Bật lại âm thanh"}
+            <header className="flex-shrink-0 z-20 relative">
+                <div className="header-glass px-5 py-3.5 flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-[0.9rem] flex items-center justify-center shrink-0 overflow-hidden p-[3px]"
+                        style={{
+                            background: 'white',
+                            border: '1px solid var(--color-border)',
+                            boxShadow: 'var(--shadow-sm)',
+                        }}
                     >
-                        {isAudioEnabled ? '🔊' : '🔇'}
-                    </button>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 border border-green-200">
-                        <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse-glow"></span>
+                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-xl" />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-[16px] font-extrabold leading-tight flex items-center gap-1.5 truncate" style={{ color: 'var(--color-text-primary)' }}>
+                            Trợ lý AI Trường mầm non Ninh Lai
+                            <span className="inline-flex w-3.5 h-3.5 items-center justify-center rounded-full shrink-0"
+                                style={{ background: 'var(--color-accent)', boxShadow: '0 0 8px var(--color-accent-glow)' }}
+                            >
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                            </span>
+                        </h1>
+                        <p className="text-[13px] font-bold mt-0.5 truncate" style={{ color: 'var(--color-text-muted)' }}>
+                            Luôn sẵn sàng hỗ trợ 💖
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0">
+                        <button
+                            onClick={toggleAudio}
+                            className="audio-btn"
+                            title={isAudioEnabled ? "Tắt âm thanh" : "Bật lại âm thanh"}
+                        >
+                            {isAudioEnabled ? '🔊' : '🔇'}
+                        </button>
+                        <div className="status-badge">
+                            <span className="w-2.5 h-2.5 rounded-full animate-pulse-glow" style={{ background: 'var(--color-accent)' }}></span>
+                        </div>
                     </div>
                 </div>
+                {/* Accent line under header */}
+                <div className="header-accent-line"></div>
             </header>
 
             {/* Messages Area */}
-            <main className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
-                {messages.map((msg, i) => (
-                    <ChatMessage key={i} message={msg} index={i} onReact={handleReaction} />
-                ))}
+            <main className="flex-1 overflow-y-auto px-4 py-6">
+                <div className="chat-container space-y-6">
+                    {messages.map((msg, i) => (
+                        <ChatMessage key={i} message={msg} index={i} onReact={handleReaction} />
+                    ))}
 
-                {/* Quick Questions */}
-                {showQuickQuestions && messages.length === 1 && (
-                    <div className="animate-fade-in-up mt-8 max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
-                        <p className="text-sm font-bold mb-2 pl-2 text-gray-500">
-                            💡 Phụ huynh có thể tham khảo:
-                        </p>
-                        <div className="flashcard-grid">
-                            {QUICK_QUESTIONS.map((q, i) => (
-                                <div
-                                    key={i}
-                                    onClick={() => sendMessage(q.text)}
-                                    className="flashcard"
-                                    style={{ animationDelay: `${0.4 + i * 0.05}s` }}
-                                >
-                                    <span className="emoji">{q.emoji}</span>
-                                    <span className="text">{q.text}</span>
-                                </div>
-                            ))}
+                    {/* Quick Questions */}
+                    {showQuickQuestions && messages.length === 1 && (
+                        <div className="animate-fade-in-up mt-8 max-w-2xl mx-auto" style={{ animationDelay: '0.3s' }}>
+                            <p className="text-sm font-bold mb-3 text-center" style={{ color: 'var(--color-text-muted)' }}>
+                                💡 Phụ huynh có thể tham khảo:
+                            </p>
+                            <div className="flashcard-grid">
+                                {QUICK_QUESTIONS.map((q, i) => (
+                                    <div
+                                        key={i}
+                                        onClick={() => sendMessage(q.text)}
+                                        className="flashcard"
+                                        style={{ animationDelay: `${0.4 + i * 0.05}s` }}
+                                    >
+                                        <span className="emoji">{q.emoji}</span>
+                                        <span className="text">{q.text}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {isLoading && messages[messages.length - 1]?.role === 'user' && <TypingIndicator />}
-                <div ref={messagesEndRef} />
+                    {isLoading && messages[messages.length - 1]?.role === 'user' && <TypingIndicator />}
+                    <div ref={messagesEndRef} />
+                </div>
             </main>
 
             {/* Input Area */}
