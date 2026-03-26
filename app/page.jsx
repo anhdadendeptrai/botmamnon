@@ -221,7 +221,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center h-screen relative overflow-hidden">
                 <div className="mesh-bg"></div>
 
-                <div className="welcome-card text-center w-full max-w-sm px-8 py-10 mx-4 animate-scale-in relative z-10">
+                <div className="welcome-card text-center w-full max-w-sm px-5 sm:px-8 py-10 mx-4 animate-scale-in relative z-10">
                     {/* Avatar */}
                     <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 relative animate-float overflow-hidden"
                         style={{
@@ -234,8 +234,9 @@ export default function Home() {
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight"
+                    <h1 className="font-extrabold mb-2 tracking-tight whitespace-nowrap"
                         style={{
+                            fontSize: 'clamp(22px, 7vw, 28px)',
                             background: 'linear-gradient(135deg, #059669, #34D399)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
