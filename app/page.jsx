@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const WELCOME_MESSAGE = {
     role: 'bot',
@@ -11,48 +11,15 @@ const QUICK_QUESTIONS = [
     { emoji: '🏫', text: 'Giới thiệu về trường' },
     { emoji: '📋', text: 'Hồ sơ nhập học cần gì?' },
     { emoji: '🕐', text: 'Giờ đón trả trẻ' },
-    { emoji: '🍴', text: 'Thực đơn bán trú' },
+    { emoji: '🍱', text: 'Thực đơn bán trú' },
     { emoji: '📞', text: 'Địa chỉ liên hệ' },
     { emoji: '📖', text: 'Quy định nhà trường' },
 ];
 
-// Inline Base64 pop sound (very short cheerful blip)
-const POP_SOUND_B64 = 'data:audio/wav;base64,UklGRlQFAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YTAFAAAAAAAAAAAAAAAAAAAAAHwA+AHuA8QFYAfICAkKIAv4C40M3AznDKwMLgy2CyoLjArpCTgJhwjUByoHbga0BQIFUASuAxIDhAIBApABNAHuAMAAnACMAJoAvQDzADwBkAHuAUoCqAIAA00DlAPMA/kDGAQqBCsEHwQDBN8DsAN6AzoDAAO8AnoCOgIGAtkBtgGhAZYBmAGmAbsBzwH2ARACSQJxArMCxQLvAuUC8QK/AqsCbAJKAvsB0AGCAVwBGAH+AMoAugCUAI4AbABmAEQAPAAiABgACAD8//b/8v/u/+r/7P/u//T/+v8EAA4AHAAuAEIAVgBqAIQAnAC4ANQAAAEiAVIBdgGoAcoBAAISAiICIgIWAgACYgIxAugBrwFeAS0B4ACqAGMAPoAFgN5/x3+7f6x/qH+of6p/rn+0f7t/hX/Sf9z/7P/3/8fAEkAlAC/AAYBNQF+AaMB5AEIAkoCbAKiArgC4ALcAvIC0ALSAqwCqAJ+AmoCRAIoAgACxAGqAWgBOAEKAfAAvACeAHgAdgBAAEgALAAyAB4AGgAQAAoACAACAP7/AAAAAAIABAAIABIAGAAiACgAMAA0AEIAQAA8ADgAQAAsADAAFAAWAAIA/P/s/+b/3P/Y/9b/1P/e/9z/8P/q/wIAAAAYABgALAA0AEIAUABcAHIAfACSAKAAsAC+AM4A1gDqAPQAAAEIARABFAEcARoBHAEUARABBAH8APQA5gDaAMwAwAC2AKoAoACWAJAAiACCAHgAcgBsAGgAYgBiAF4AXgBeAF4AXgBiAGIAYgBkAGYAZgBmAGgAaABqAGoAbgBuAHAAcgBwAHQAcgBwAHAAbABqAGQAYABaAFgAUgBMAEgAQgA+ADgAMgAuACgAJAAeABoAFAAQAAoABgAAAAAA/P/4//T/8P/u/+j/5v/i/97/2v/Y/9T/0v/O/8z/yv/I/8b/xv/E/8T/xP/E/8b/xv/G/8j/yv/M/87/0P/S/9b/2P/c/+D/5P/o/+z/8v/2//r/AAD';
-
-function LegoBuddySVG({ size = 32 }) {
+function BotAvatar() {
     return (
-        <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="lego-buddy-svg">
-            {/* Head - main block */}
-            <rect x="14" y="4" width="36" height="28" rx="4" fill="#FFBE0B" stroke="#1B2A4A" strokeWidth="3" />
-            {/* Eyes - big round dots */}
-            <circle cx="25" cy="18" r="5" fill="#1B2A4A" />
-            <circle cx="39" cy="18" r="5" fill="#1B2A4A" />
-            {/* Eye shine */}
-            <circle cx="27" cy="16" r="1.5" fill="white" />
-            <circle cx="41" cy="16" r="1.5" fill="white" />
-            {/* Smile */}
-            <path d="M24 25 Q32 31 40 25" stroke="#1B2A4A" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-            {/* Antenna */}
-            <rect x="29" y="0" width="6" height="6" rx="1" fill="#EF476F" stroke="#1B2A4A" strokeWidth="2" />
-            {/* Body - block */}
-            <rect x="18" y="32" width="28" height="20" rx="3" fill="#06D6A0" stroke="#1B2A4A" strokeWidth="3" />
-            {/* Body detail - studs */}
-            <circle cx="27" cy="42" r="3" fill="rgba(255,255,255,0.4)" stroke="#1B2A4A" strokeWidth="1.5" />
-            <circle cx="37" cy="42" r="3" fill="rgba(255,255,255,0.4)" stroke="#1B2A4A" strokeWidth="1.5" />
-            {/* Arms */}
-            <rect x="6" y="34" width="12" height="8" rx="3" fill="#FFBE0B" stroke="#1B2A4A" strokeWidth="2.5" />
-            <rect x="46" y="34" width="12" height="8" rx="3" fill="#FFBE0B" stroke="#1B2A4A" strokeWidth="2.5" />
-            {/* Feet */}
-            <rect x="20" y="52" width="10" height="8" rx="2" fill="#EF476F" stroke="#1B2A4A" strokeWidth="2.5" />
-            <rect x="34" y="52" width="10" height="8" rx="2" fill="#EF476F" stroke="#1B2A4A" strokeWidth="2.5" />
-        </svg>
-    );
-}
-
-function BotAvatar({ isBuilding = false }) {
-    return (
-        <div className={`avatar-ring bot-avatar ${isBuilding ? 'building' : ''}`}>
-            <LegoBuddySVG size={34} />
+        <div className="avatar-ring bot-avatar">
+            <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-full relative z-10" />
         </div>
     );
 }
@@ -68,11 +35,11 @@ function UserAvatar() {
 function TypingIndicator() {
     return (
         <div className="flex items-start gap-3 animate-fade-in-up">
-            <BotAvatar isBuilding={true} />
-            <div className="chat-bubble chat-bubble-bot flex items-center gap-2 py-4 px-5">
-                <span className="typing-block"></span>
-                <span className="typing-block"></span>
-                <span className="typing-block"></span>
+            <BotAvatar />
+            <div className="chat-bubble chat-bubble-bot flex items-center gap-1.5 py-4 px-5">
+                <span className="typing-dot"></span>
+                <span className="typing-dot"></span>
+                <span className="typing-dot"></span>
             </div>
         </div>
     );
@@ -84,7 +51,7 @@ function ChatMessage({ message, index, onReact }) {
 
     return (
         <div
-            className={`flex items-start gap-3 animate-pop-in ${isBot ? '' : 'flex-row-reverse'}`}
+            className={`flex items-start gap-3 animate-fade-in-up ${isBot ? '' : 'flex-row-reverse'}`}
             style={{ animationDelay: `${index * 0.05}s` }}
         >
             {isBot ? <BotAvatar /> : <UserAvatar />}
@@ -118,7 +85,6 @@ export default function Home() {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const audioRef = useRef(null);
-    const prevMsgCount = useRef(1);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -129,29 +95,6 @@ export default function Home() {
             scrollToBottom();
         }
     }, [messages, isLoading, hasStarted]);
-
-    // Play pop sound when new bot message arrives
-    const playPopSound = useCallback(() => {
-        if (!isAudioEnabled) return;
-        try {
-            const pop = new Audio(POP_SOUND_B64);
-            pop.volume = 0.4;
-            pop.play().catch(() => { });
-        } catch (e) {
-            // Silently ignore
-        }
-    }, [isAudioEnabled]);
-
-    // Watch for new bot messages and play pop
-    useEffect(() => {
-        if (messages.length > prevMsgCount.current) {
-            const lastMsg = messages[messages.length - 1];
-            if (lastMsg.role === 'bot' && hasStarted) {
-                playPopSound();
-            }
-        }
-        prevMsgCount.current = messages.length;
-    }, [messages, hasStarted, playPopSound]);
 
     const playAudio = async (text) => {
         if (!isAudioEnabled) return;
@@ -275,78 +218,53 @@ export default function Home() {
     // ====== WELCOME SCREEN ======
     if (!hasStarted) {
         return (
-            <div className="welcome-split-screen">
-                {/* LEFT PANEL — Branding & Introduction */}
-                <div className="welcome-left-panel">
-                    <div className="welcome-left-content">
-                        {/* Decorative floating blocks */}
-                        <div className="welcome-deco welcome-deco-1">🧱</div>
-                        <div className="welcome-deco welcome-deco-2">⭐</div>
-                        <div className="welcome-deco welcome-deco-3">🎨</div>
+            <div className="flex flex-col items-center justify-center h-screen relative overflow-hidden">
+                <div className="mesh-bg"></div>
 
-                        {/* Lego Buddy Avatar */}
-                        <div className="welcome-avatar-wrapper animate-float">
-                            <LegoBuddySVG size={80} />
-                        </div>
-
-                        {/* Title & Description */}
-                        <h1 className="welcome-title">Trường Mầm non Ninh Lai</h1>
-                        <p className="welcome-subtitle">🧩 Chatbot Mầm non — Cùng bé khôn lớn mỗi ngày!</p>
-
-                        <div className="welcome-divider"></div>
-
-                        <p className="welcome-description">
-                            Trợ lý AI thông minh hỗ trợ phụ huynh giải đáp mọi thắc mắc về trường lớp, thủ tục, chương trình học và các hoạt động ngoại khóa.
-                        </p>
-
-                        {/* Feature pills */}
-                        <div className="welcome-features">
-                            <span className="welcome-feature-pill">🏫 Thông tin trường lớp</span>
-                            <span className="welcome-feature-pill">📋 Hồ sơ nhập học</span>
-                            <span className="welcome-feature-pill">🕐 Lịch học & đón trả</span>
-                            <span className="welcome-feature-pill">📞 Liên hệ nhanh</span>
-                        </div>
+                <div className="welcome-card text-center w-full max-w-sm px-8 py-10 mx-4 animate-scale-in relative z-10">
+                    {/* Avatar */}
+                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 relative animate-float overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(56,189,248,0.08))',
+                            boxShadow: '0 8px 32px rgba(16,185,129,0.12)',
+                            border: '1px solid rgba(16,185,129,0.15)'
+                        }}
+                    >
+                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-[85%] h-[85%] object-cover rounded-full relative z-10" />
                     </div>
-                </div>
 
-                {/* RIGHT PANEL — CTA */}
-                <div className="welcome-right-panel">
-                    <div className="welcome-right-content">
-                        <div className="welcome-cta-icon">🤖</div>
-                        <h2 className="welcome-cta-title">Sẵn sàng hỗ trợ bạn!</h2>
-                        <p className="welcome-cta-desc">
-                            Nhấn nút bên dưới để bắt đầu trò chuyện với Lego Buddy. Chúng tôi luôn sẵn sàng 24/7!
-                        </p>
+                    {/* Title */}
+                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight"
+                        style={{
+                            background: 'linear-gradient(135deg, #059669, #34D399)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                        }}
+                    >
+                        Mầm non Ninh Lai
+                    </h1>
+                    <p className="text-[15px] font-semibold mb-10" style={{ color: 'var(--color-text-secondary)' }}>
+                        Cùng bé khôn lớn mỗi ngày 🎈
+                    </p>
 
-                        <div className="start-btn-glow">
-                            <button
-                                onClick={() => setHasStarted(true)}
-                                className="welcome-start-btn"
-                            >
-                                <span>🧩 Bắt đầu trò chuyện</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                    <polyline points="12 5 19 12 12 19" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="welcome-trust-badges">
-                            <div className="welcome-trust-item">
-                                <span className="welcome-trust-icon">🔒</span>
-                                <span>An toàn</span>
-                            </div>
-                            <div className="welcome-trust-item">
-                                <span className="welcome-trust-icon">⚡</span>
-                                <span>Tức thì</span>
-                            </div>
-                            <div className="welcome-trust-item">
-                                <span className="welcome-trust-icon">🕐</span>
-                                <span>24/7</span>
-                            </div>
-                        </div>
+                    {/* Start Button */}
+                    <div className="start-btn-glow">
+                        <button
+                            onClick={() => setHasStarted(true)}
+                            className="w-full px-8 py-[16px] rounded-2xl text-white font-bold text-[17px] hover:-translate-y-1 transition-all duration-300 relative z-10"
+                            style={{
+                                background: 'linear-gradient(135deg, var(--color-accent-dark), var(--color-accent))',
+                                boxShadow: '0 8px 24px var(--color-accent-glow)',
+                                border: '1px solid rgba(52, 211, 153, 0.3)',
+                            }}
+                        >
+                            Bắt đầu trò chuyện ✨
+                        </button>
                     </div>
+
+                    <p className="text-xs mt-6 font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+                        Trợ lý AI đáng yêu luôn sẵn sàng 24/7!
+                    </p>
                 </div>
             </div>
         );
@@ -360,19 +278,19 @@ export default function Home() {
             {/* Header */}
             <header className="flex-shrink-0 z-20 relative">
                 <div className="header-glass px-5 py-3.5 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 overflow-hidden"
+                    <div className="w-11 h-11 rounded-[0.9rem] flex items-center justify-center shrink-0 overflow-hidden p-[3px]"
                         style={{
-                            background: 'var(--color-primary)',
-                            border: '3px solid var(--color-frame)',
-                            boxShadow: 'var(--shadow-block-sm)',
+                            background: 'white',
+                            border: '1px solid var(--color-border)',
+                            boxShadow: 'var(--shadow-sm)',
                         }}
                     >
-                        <LegoBuddySVG size={36} />
+                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-full h-full object-cover rounded-xl" />
                     </div>
 
                     <div className="flex-1 min-w-0">
                         <h1 className="text-[16px] font-extrabold leading-tight flex items-center gap-1.5 truncate" style={{ color: 'var(--color-text-primary)' }}>
-                            🧩 Chatbot Trường Mầm non Ninh Lai
+                            Trợ lý AI Trường mầm non Ninh Lai
                             <span className="inline-flex w-3.5 h-3.5 items-center justify-center rounded-full shrink-0"
                                 style={{ background: 'var(--color-accent)', boxShadow: '0 0 8px var(--color-accent-glow)' }}
                             >
@@ -380,7 +298,7 @@ export default function Home() {
                             </span>
                         </h1>
                         <p className="text-[13px] font-bold mt-0.5 truncate" style={{ color: 'var(--color-text-muted)' }}>
-                            Lego Buddy luôn sẵn sàng hỗ trợ! 🤖
+                            Luôn sẵn sàng hỗ trợ 💖
                         </p>
                     </div>
 
@@ -397,7 +315,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-                {/* Accent line under header - colorful blocks */}
+                {/* Accent line under header */}
                 <div className="header-accent-line"></div>
             </header>
 
@@ -408,11 +326,11 @@ export default function Home() {
                         <ChatMessage key={i} message={msg} index={i} onReact={handleReaction} />
                     ))}
 
-                    {/* Quick Questions - Block Cards */}
+                    {/* Quick Questions */}
                     {showQuickQuestions && messages.length === 1 && (
                         <div className="animate-fade-in-up mt-8 max-w-2xl mx-auto" style={{ animationDelay: '0.3s' }}>
                             <p className="text-sm font-bold mb-3 text-center" style={{ color: 'var(--color-text-muted)' }}>
-                                🧱 Phụ huynh có thể tham khảo:
+                                💡 Phụ huynh có thể tham khảo:
                             </p>
                             <div className="flashcard-grid">
                                 {QUICK_QUESTIONS.map((q, i) => (
