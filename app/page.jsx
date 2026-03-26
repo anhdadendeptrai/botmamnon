@@ -218,53 +218,78 @@ export default function Home() {
     // ====== WELCOME SCREEN ======
     if (!hasStarted) {
         return (
-            <div className="flex flex-col items-center justify-center h-screen relative overflow-hidden">
-                <div className="mesh-bg"></div>
+            <div className="welcome-split-screen">
+                {/* LEFT PANEL — Branding & Introduction */}
+                <div className="welcome-left-panel">
+                    <div className="welcome-left-content">
+                        {/* Decorative floating elements */}
+                        <div className="welcome-deco welcome-deco-1">🌈</div>
+                        <div className="welcome-deco welcome-deco-2">⭐</div>
+                        <div className="welcome-deco welcome-deco-3">🎨</div>
 
-                <div className="welcome-card text-center w-full max-w-sm px-8 py-10 mx-4 animate-scale-in relative z-10">
-                    {/* Avatar */}
-                    <div className="w-24 h-24 mx-auto rounded-[2rem] flex items-center justify-center mb-6 relative animate-float overflow-hidden"
-                        style={{
-                            background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(56,189,248,0.08))',
-                            boxShadow: '0 8px 32px rgba(16,185,129,0.12)',
-                            border: '1px solid rgba(16,185,129,0.15)'
-                        }}
-                    >
-                        <img src="/image/avata.jpg" alt="AI Avatar" className="w-[85%] h-[85%] object-cover rounded-full relative z-10" />
+                        {/* Avatar */}
+                        <div className="welcome-avatar-wrapper animate-float">
+                            <img src="/image/avata.jpg" alt="AI Avatar" className="welcome-avatar-img" />
+                        </div>
+
+                        {/* Title & Description */}
+                        <h1 className="welcome-title">Trường Mầm non Ninh Lai</h1>
+                        <p className="welcome-subtitle">Cùng bé khôn lớn mỗi ngày 🎈</p>
+
+                        <div className="welcome-divider"></div>
+
+                        <p className="welcome-description">
+                            Trợ lý AI thông minh hỗ trợ phụ huynh giải đáp mọi thắc mắc về trường lớp, thủ tục, chương trình học và các hoạt động ngoại khóa.
+                        </p>
+
+                        {/* Feature pills */}
+                        <div className="welcome-features">
+                            <span className="welcome-feature-pill">🏫 Thông tin trường lớp</span>
+                            <span className="welcome-feature-pill">📋 Hồ sơ nhập học</span>
+                            <span className="welcome-feature-pill">🕐 Lịch học & đón trả</span>
+                            <span className="welcome-feature-pill">📞 Liên hệ nhanh</span>
+                        </div>
                     </div>
+                </div>
 
-                    {/* Title */}
-                    <h1 className="text-[28px] font-extrabold mb-2 tracking-tight"
-                        style={{
-                            background: 'linear-gradient(135deg, #059669, #34D399)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                        }}
-                    >
-                        Mầm non Ninh Lai
-                    </h1>
-                    <p className="text-[15px] font-semibold mb-10" style={{ color: 'var(--color-text-secondary)' }}>
-                        Cùng bé khôn lớn mỗi ngày 🎈
-                    </p>
+                {/* RIGHT PANEL — CTA */}
+                <div className="welcome-right-panel">
+                    <div className="welcome-right-content">
+                        <div className="welcome-cta-icon">💬</div>
+                        <h2 className="welcome-cta-title">Sẵn sàng hỗ trợ bạn!</h2>
+                        <p className="welcome-cta-desc">
+                            Nhấn nút bên dưới để bắt đầu trò chuyện với trợ lý AI. Chúng tôi luôn sẵn sàng 24/7!
+                        </p>
 
-                    {/* Start Button */}
-                    <div className="start-btn-glow">
-                        <button
-                            onClick={() => setHasStarted(true)}
-                            className="w-full px-8 py-[16px] rounded-2xl text-white font-bold text-[17px] hover:-translate-y-1 transition-all duration-300 relative z-10"
-                            style={{
-                                background: 'linear-gradient(135deg, var(--color-accent-dark), var(--color-accent))',
-                                boxShadow: '0 8px 24px var(--color-accent-glow)',
-                                border: '1px solid rgba(52, 211, 153, 0.3)',
-                            }}
-                        >
-                            Bắt đầu trò chuyện ✨
-                        </button>
+                        <div className="start-btn-glow">
+                            <button
+                                onClick={() => setHasStarted(true)}
+                                className="welcome-start-btn"
+                            >
+                                <span>Bắt đầu trò chuyện</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="welcome-trust-badges">
+                            <div className="welcome-trust-item">
+                                <span className="welcome-trust-icon">🔒</span>
+                                <span>An toàn & bảo mật</span>
+                            </div>
+                            <div className="welcome-trust-item">
+                                <span className="welcome-trust-icon">⚡</span>
+                                <span>Phản hồi tức thì</span>
+                            </div>
+                            <div className="welcome-trust-item">
+                                <span className="welcome-trust-icon">🕐</span>
+                                <span>Hoạt động 24/7</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <p className="text-xs mt-6 font-semibold" style={{ color: 'var(--color-text-muted)' }}>
-                        Trợ lý AI đáng yêu luôn sẵn sàng 24/7!
-                    </p>
                 </div>
             </div>
         );
