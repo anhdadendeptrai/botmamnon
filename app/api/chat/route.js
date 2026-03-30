@@ -33,9 +33,16 @@ export async function POST(request) {
         const context = searchDocs(message.trim(), docs);
         console.log(`[CHAT API] Step 2 - Search: ${Date.now() - t2}ms (context: ${context.length} chars)`);
 
+        // 🔹 1. Giới hạn history
+        const trimmedHistory = safeHistory.slice(-6);
+
+        // 🔹 2. Giới hạn context
+        const MAX_CONTEXT_LENGTH = 2000;
+        const safeContext = context.slice(0, MAX_CONTEXT_LENGTH);
+
         // Step 3: Ask Gemini
         const t3 = Date.now();
-        const reply = await askGemini(context, message.trim(), safeHistory);
+        const reply = await askGemini(safeContext, message.trim(), trimmedHistory);
         console.log(`[CHAT API] Step 3 - Gemini: ${Date.now() - t3}ms`);
         console.log(`[CHAT API] ✅ Total time: ${Date.now() - reqStartTime}ms`);
 
