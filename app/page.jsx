@@ -81,10 +81,8 @@ export default function Home() {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showQuickQuestions, setShowQuickQuestions] = useState(true);
-    const [isAudioEnabled, setIsAudioEnabled] = useState(true);
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
-    const audioRef = useRef(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -96,39 +94,7 @@ export default function Home() {
         }
     }, [messages, isLoading, hasStarted]);
 
-    const playAudio = async (text) => {
-        if (!isAudioEnabled) return;
 
-        try {
-            const res = await fetch('/api/tts', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text }),
-            });
-            const data = await res.json();
-            if (data.audioContent) {
-                const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
-
-                if (audioRef.current) {
-                    audioRef.current.pause();
-                }
-                audioRef.current = audio;
-                await audio.play();
-            }
-        } catch (error) {
-            console.error('Audio play error:', error);
-        }
-    };
-
-    // Auto-play the welcome message when user clicks Start
-    useEffect(() => {
-        if (hasStarted && isAudioEnabled) {
-            const playWelcome = setTimeout(() => {
-                playAudio(WELCOME_MESSAGE.content).catch(() => { });
-            }, 300);
-            return () => clearTimeout(playWelcome);
-        }
-    }, [hasStarted]); // Run when hasStarted becomes true
 
     const sendMessage = async (text) => {
         const trimmed = text.trim();
@@ -172,15 +138,11 @@ export default function Home() {
             const botMessage = { role: 'bot', content: cleanReply, reaction: null };
             setMessages(prev => [...prev, botMessage]);
 
-            // Auto play TTS for the bot's response
-            if (cleanReply.trim()) {
-                playAudio(cleanReply).catch(() => { });
-            }
+
 
         } catch (error) {
             const errorMsg = error.message || 'Hiện tại hệ thống đang gặp sự cố. Phụ huynh vui lòng thử lại sau ạ.';
             setMessages(prev => [...prev, { role: 'bot', content: errorMsg, reaction: null }]);
-            playAudio(errorMsg).catch(() => { });
         } finally {
             setIsLoading(false);
             setTimeout(() => inputRef.current?.focus(), 100);
@@ -208,12 +170,7 @@ export default function Home() {
         }
     };
 
-    const toggleAudio = () => {
-        setIsAudioEnabled(!isAudioEnabled);
-        if (isAudioEnabled && audioRef.current) {
-            audioRef.current.pause();
-        }
-    };
+
 
     // ====== WELCOME SCREEN ======
     if (!hasStarted) {
@@ -304,13 +261,6 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0">
-                        <button
-                            onClick={toggleAudio}
-                            className="audio-btn"
-                            title={isAudioEnabled ? "Tắt âm thanh" : "Bật lại âm thanh"}
-                        >
-                            {isAudioEnabled ? '🔊' : '🔇'}
-                        </button>
                         <div className="status-badge">
                             <span className="w-2.5 h-2.5 rounded-full animate-pulse-glow" style={{ background: 'var(--color-accent)' }}></span>
                         </div>
