@@ -9,8 +9,8 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-    title: 'Trợ lý AI Trường mầm non Ninh Lai',
-    description: 'Chatbot hỗ trợ thông tin cho phụ huynh Trường Mầm non Ninh Lai. Giải đáp thắc mắc về nhập học, lịch học, thực đơn và các thông tin nhà trường.',
+    title: 'Trợ lý AI Trường mầm non Sơn Thủy',
+    description: 'Chatbot hỗ trợ thông tin cho phụ huynh Trường Mầm non Sơn Thủy. Giải đáp thắc mắc về nhập học, lịch học, thực đơn và các thông tin nhà trường.',
 };
 
 export default function RootLayout({ children }) {

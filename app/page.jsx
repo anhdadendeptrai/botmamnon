@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 
 const WELCOME_MESSAGE = {
     role: 'bot',
-    content: `Chào bố mẹ! 👋\nEm là Trợ lý AI Trường mầm non Ninh Lai. Bố mẹ cần hỗ trợ thông tin gì cứ nhắn em nhé! 🏫✨`,
+    content: `Chào bố mẹ! 👋\nEm là Trợ lý AI Trường mầm non Sơn Thủy. Bố mẹ cần hỗ trợ thông tin gì cứ nhắn em nhé! 🏫✨`,
 };
 
 const QUICK_QUESTIONS = [
@@ -199,7 +199,7 @@ export default function Home() {
                             WebkitTextFillColor: 'transparent',
                         }}
                     >
-                        Mầm non Ninh Lai
+                        Mầm non Sơn Thủy
                     </h1>
                     <p className="text-[15px] font-semibold mb-10" style={{ color: 'var(--color-text-secondary)' }}>
                         Cùng bé khôn lớn mỗi ngày 🎈
@@ -248,7 +248,7 @@ export default function Home() {
 
                     <div className="flex-1 min-w-0">
                         <h1 className="text-[16px] font-extrabold leading-tight flex items-center gap-1.5 truncate" style={{ color: 'var(--color-text-primary)' }}>
-                            Trợ lý AI Trường mầm non Ninh Lai
+                            Trợ lý AI Trường mầm non Sơn Thủy
                             <span className="inline-flex w-3.5 h-3.5 items-center justify-center rounded-full shrink-0"
                                 style={{ background: 'var(--color-accent)', boxShadow: '0 0 8px var(--color-accent-glow)' }}
                             >
